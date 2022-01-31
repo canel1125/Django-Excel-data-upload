@@ -4,7 +4,7 @@ from django.db import models
 
 
 # Create your models here.
-class Contracts(models.Model):
+class Contract(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateField()
     slug = models.SlugField(max_length=100, null=False, unique=True)    
@@ -13,7 +13,7 @@ class Contracts(models.Model):
         return self.name
 
 class Rates():
-    contract = models.ForeignKey(Contracts, on_delete=models.CASCADE,related_name='rate_contract')
+    contract = models.ForeignKey(Contract, on_delete=models.CASCADE,related_name='rate_contract')
     origin = models.CharField(max_length=50)
     destination = models.CharField(max_length=50)
     currency = models.CharField(max_length=4)

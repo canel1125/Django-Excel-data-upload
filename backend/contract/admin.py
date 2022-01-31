@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Contracts
+from .models import Contract
 # Register your models here.
 
-admin.site.register(Contracts)
+admin.site.register(Contract)
