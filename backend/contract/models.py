@@ -7,19 +7,27 @@ from django.db import models
 class Contract(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateField()
-    slug = models.SlugField(max_length=100, null=False, unique=True)    
+    slug = models.SlugField(max_length=100, null=False, unique=True, primary_key=True)    
+
+    class Meta:
+        ordering = ('slug',)
 
     def __str__(self):
         return self.name
 
-class Rates():
+    def get_absolute_url(self):
+        return f'/{self.slug}/'
+    
+
+class Rates(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE,related_name='rate_contract')
     origin = models.CharField(max_length=50)
     destination = models.CharField(max_length=50)
     currency = models.CharField(max_length=4)
-    twenty = models.DecimalField(max_digits=4)
-    forty = models.DecimalField(max_digits=4)
-    fortyhc = models.DecimalField(max_digits=4)
+    twenty = models.DecimalField(max_digits=6, decimal_places=2)
+    forty = models.DecimalField(max_digits=6, decimal_places=2)
+    fortyhc = models.DecimalField(max_digits=6, decimal_places=2)
+
 
     
     
