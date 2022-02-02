@@ -14,7 +14,7 @@
             </thead>
             <tbody>
                 <tr v-for="rate in ratesList" :key="rate.id">
-                    <td>{{rate.id }}</td>
+                    <td>{{rate.contract }}</td>
                     <td>{{rate.origin }}</td>
                     <td>{{rate.destination }}</td>
                     <td>{{rate.currency }}</td>
@@ -40,7 +40,7 @@ export default {
       }
   },
     created(){
-        getAPI.get('http://127.0.0.1:8000/contracts/rates/1')
+        getAPI.get('http://127.0.0.1:8000/contracts/rates/contrato-1')
             .then(response=> {
                 console.log(response.data)
                 this.ratesList = response.data
