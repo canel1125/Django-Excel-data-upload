@@ -6,11 +6,11 @@
           <div class="card">
             <h3 class="mb-3">Ingresar ruta</h3>
             <div class="form-floating mb-3">
-              <input type="name" class="form-control" id="floatingInput" placeholder="Nombre" v-model="contract.name" required>
+              <input type="name" class="form-control" id="floatingInput" placeholder="Nombre" v-model="contract.name" required :max="date">
               <label for="floatingInput">Nombre</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="date" class="form-control" id="ContractDate" name="date" v-model="contract.date" required>
+              <input type="date" class="form-control" id="ContractDate" name="date" v-model="contract.date" v-bind:max="date"  required>
               <label for="date">Fecha del contrato:</label>
             </div>
             <div class="input-group mb-3">
@@ -32,17 +32,15 @@ import {getAPI } from '../axios-api'
 import XLSX from 'xlsx';
 
 
-//validar fecha front
+//Variable date donde voy a guardar la fecha actual para validar que no se ingrese una fecha futura por front
 let date = new Date().toISOString().slice(0,-14)
-console.log(date); //:max
-
-//document.getElementById("ContractDate").max = date;
-
+//console.log(date);
 
 export default {
   name: 'UploadForm',
   data(){
     return{
+      date,
       contract: {
         'name': '',
         'date': '',
