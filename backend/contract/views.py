@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import get_list_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -18,12 +18,9 @@ class ContractListView(APIView):
 
         return Response(serializer.data)
 
-class RatesView(APIView):
-    def get_object(self,contract_slug):
-        return Rates.objects.filter(contract = contract_slug)
-    
+class RatesView(APIView):    
     def get(self,request, contract_slug):
-        contract = self.get_object(contract_slug)
+        contract = get_list_or_404(Rates, contract = contract_slug)
         serializer = RatesSerializer(contract, many=True)
         return Response(serializer.data)
         
