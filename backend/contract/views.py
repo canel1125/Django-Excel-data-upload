@@ -20,9 +20,9 @@ class ContractListView(APIView):
 
 class RatesView(APIView):
     def get_object(self,contract_slug):
-        return Rates.objects.get(contract = contract_slug)
+        return Rates.objects.filter(contract = contract_slug)
     
     def get(self,request, contract_slug):
         contract = self.get_object(contract_slug)
-        serializer = RatesSerializer(contract)
+        serializer = RatesSerializer(contract, many=True)
         return Response(serializer.data)

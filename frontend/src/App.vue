@@ -1,8 +1,8 @@
 <template>
   <div>
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Cargar contratos</router-link> |
+      <router-link to="/search">Buscar contratos</router-link>
     </div>
     <router-view/>
   </div>
@@ -29,4 +29,5 @@
     }
   }
 }
+@import'~bootstrap/dist/css/bootstrap.css'
 </style>

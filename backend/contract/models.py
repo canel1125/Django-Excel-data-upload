@@ -7,7 +7,7 @@ from django.db import models
 class Contract(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateField()
-    slug = models.SlugField(max_length=100, null=False, unique=True, primary_key=True)    
+    slug = models.SlugField(max_length=100, null=False, unique=True)
 
     class Meta:
         ordering = ('slug',)
