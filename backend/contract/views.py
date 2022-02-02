@@ -26,3 +26,4 @@ class RatesView(APIView):
         contract = self.get_object(contract_slug)
         serializer = RatesSerializer(contract, many=True)
         return Response(serializer.data)
+        

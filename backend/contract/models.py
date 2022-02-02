@@ -20,13 +20,16 @@ class Contract(models.Model):
     
 
 class Rates(models.Model):
-    contract = models.ForeignKey(Contract, on_delete=models.CASCADE,related_name='rate_contract')
+    contract = models.ForeignKey(Contract, on_delete=models.CASCADE, to_field="slug", db_column="contract")
     origin = models.CharField(max_length=50)
     destination = models.CharField(max_length=50)
     currency = models.CharField(max_length=4)
     twenty = models.DecimalField(max_digits=6, decimal_places=2)
     forty = models.DecimalField(max_digits=6, decimal_places=2)
     fortyhc = models.DecimalField(max_digits=6, decimal_places=2)
+
+    def __str__(self):
+        return str(self.contract.slug)
 
 
     

@@ -14,6 +14,10 @@ class ContractSerializer(serializers.ModelSerializer):
 
 
 class RatesSerializer(serializers.ModelSerializer):
+    contract = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='slug'
+    )
     class Meta:
         model = Rates
         fields =(
