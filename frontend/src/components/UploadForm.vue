@@ -52,32 +52,46 @@ export default {
     createContract(){
       let selectedExcel = document.getElementById("inputFile").files[0] 
       console.log(selectedExcel)
+      
+      let formData = new FormData(); // 2
+    
+      formData.append("name", document.getElementById('title').value)  
+      formData.append("date", document.getElementById('note').value)
+      formData.append("rates",)
+      formData.append("csrfmiddlewaretoken", '{{csrf_token}}') // 3
 
-        getAPI.get ('http://127.0.0.1:8000/contracts/rates/contrato-1')
-            .then(response=> {
-                console.log(response.data)
-                this.ratesList = response.data
-            })
-            .catch(err => {
-                console.log(err)
-            })
+
+      getAPI.post('http://127.0.0.1:8000/contracts/rates/contrato-1', formData)
+        .then(response=> {
+          console.log("Form subido")
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
 
     excelToJson(e) {
-          var files = e.target.files, f = files[0];
-          var reader = new FileReader();
-          reader.onload = function(e) {
-            var data = new Uint8Array(e.target.result);
-            var workbook = XLSX.read(data, {type: 'array'});
-            let sheetName = workbook.SheetNames[0]
-            let worksheet = workbook.Sheets[sheetName];
-            //console.log(XLSX.utils.sheet_to_json(worksheet));
-            this.excelRates = XLSX.utils.sheet_to_json(worksheet);
-          };
-          reader.readAsArrayBuffer(f);
-       }
+      var files = e.target.files, f = files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var data = new Uint8Array(e.target.result);
+        var workbook = XLSX.read(data, {type: 'array'});
+        let sheetName = workbook.SheetNames[0]
+        let worksheet = workbook.Sheets[sheetName];
+        let excelJsonArray = XLSX.utils.sheet_to_json(worksheet)
 
-
+        //Lista de columnas innecesarias del excel
+        let unwantedColumns=["ETT","20'FR","20'OT","20'TK","40'FH","40'FR","40'OH","40'OT","40'RH","40'RH_1","Routing"];
+        excelJsonArray.forEach(rate => {
+          for (let i = 0; i < unwantedColumns.length; i++) {
+            delete rate[unwantedColumns[i]];
+          }
+        });
+        //console.log(excelJsonArray);
+        this.excelRates = XLSX.utils.sheet_to_json(worksheet);
+      };
+      reader.readAsArrayBuffer(f);
+    }
   }
 }
 </script>
