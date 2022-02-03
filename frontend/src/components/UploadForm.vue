@@ -34,34 +34,35 @@ import XLSX from 'xlsx';
 
 //Variable date donde voy a guardar la fecha actual para validar que no se ingrese una fecha futura por front
 let date = new Date().toISOString().slice(0,-14)
-//console.log(date);
+
+var excelRates =[];
 
 export default {
   name: 'UploadForm',
   data(){
     return{
       date,
-      excelRates: [],
       contract: {
         'name': '',
         'date': '',
-        'file': [],
       }
     }
   },
   methods:{
     createContract(){      
-      let formData = new FormData(); // 2
+      let formData = {
+
+      }
     
-      formData.append("name", document.getElementById('ContractName').value)  
-      formData.append("date", document.getElementById('ContractDate').value)
-      formData.append("rates",this.excelRates)
-      formData.append("csrfmiddlewaretoken", '{{csrf_token}}') // 3
+      formData.name = document.getElementById('ContractName').value
+      formData.date = document.getElementById('ContractDate').value
+      formData.rates = excelRates
+      formData.csrfmiddlewaretoken ='{{csrf_token}}' // 3
 
       getAPI.post('/contracts/create_contract/', formData)
         .then(response=> {
           if (response.data.status == "Success") {
-            console.log("EEEEEEEEEEEEAAA");
+            console.log("El formulario se subió exitosamente");
           }
         })
         .catch(err => {
@@ -86,9 +87,8 @@ export default {
             delete rate[unwantedColumns[i]];
           }
         });
-        //console.log(excelJsonArray);
-        this.excelRates = XLSX.utils.sheet_to_json(worksheet);
-        console.log("termino de convertir archivo");
+        excelRates = excelJsonArray;
+        //console.log(excelRates);
       };
       reader.readAsArrayBuffer(f);
     }

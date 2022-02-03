@@ -5,6 +5,7 @@ from django.shortcuts import get_list_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.template.defaultfilters import slugify
+import json
 
 from .models import Contract
 from .serializers import ContractSerializer
@@ -30,19 +31,34 @@ class RatesView(APIView):
 class CreateContract(APIView):
     def post(self, request):
         if request.method == 'POST': 
-            obtained_name = request.POST.get('name') 
-            obtained_date = request.POST.get('date') 
-            Contract.objects.create(
-                name = obtained_name,
-                date = obtained_date 
+            obtained_data = json.loads(request.body)
+
+            obtained_name = obtained_data['name']
+            obtained_date = obtained_data['date']
+            obtained_rates = obtained_data['rates']
+
+            #Consulto si el contrato ya fue creado, en caso de serlo solo agrego rates
+            obj, created = Contract.objects.get_or_create(
+            slug = slugify(obtained_name),
+            defaults={'name': obtained_name, 'date': obtained_date},
             )
+
+            rates_to_create = []
+            for rate in obtained_rates:
+                rateObject = Rates(
+                    contract = obj,
+                    origin = rate["POL"],
+                    destination = rate["POD"],
+                    currency = rate["Curr."],
+                    twenty = rate["20'GP"],
+                    forty = rate["40'GP"],
+                    fortyhc = rate["40'HC"]
+                )
+                rates_to_create.append(rateObject)
+            #Almaceno los rates todos juntos
+            Rates.objects.bulk_create(rates_to_create)
+            
         return Response({
             "status": 'Success',
             "createdContractSlug": slugify(obtained_name)
         }) 
-        
-#try:
-#    obj = Contract.objects.get(name= slugify(name))
-#except Person.DoesNotExist:
-#    obj = Person(first_name='John', last_name='Lennon', birthday=date(1940, 10, 9))
-#    obj.save()
