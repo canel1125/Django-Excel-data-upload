@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify 
 
 
 
@@ -7,7 +8,11 @@ from django.db import models
 class Contract(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateField()
-    slug = models.SlugField(max_length=100, null=False, unique=True)
+    slug = models.SlugField(max_length=100, null=True, unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Contract, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ('slug',)

@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <form @submit.prevent="createContract">
+    <form @submit.prevent="createContract" method="POST">
       <div class="row justify-content-center align-items-center">
         <div class="col-lg-5 mx-auto">
           <div class="card">
             <h3 class="mb-3">Ingresar ruta</h3>
             <div class="form-floating mb-3">
-              <input type="name" class="form-control" id="floatingInput" placeholder="Nombre" v-model="contract.name" required :max="date">
+              <input type="name" class="form-control" id="ContractName" placeholder="Nombre" v-model="contract.name" required :max="date">
               <label for="floatingInput">Nombre</label>
             </div>
             <div class="form-floating mb-3">
@@ -41,32 +41,31 @@ export default {
   data(){
     return{
       date,
+      excelRates: [],
       contract: {
         'name': '',
         'date': '',
-        'file': '',
+        'file': [],
       }
     }
   },
   methods:{
-    createContract(){
-      let selectedExcel = document.getElementById("inputFile").files[0] 
-      console.log(selectedExcel)
-      
+    createContract(){      
       let formData = new FormData(); // 2
     
-      formData.append("name", document.getElementById('title').value)  
-      formData.append("date", document.getElementById('note').value)
-      formData.append("rates",)
+      formData.append("name", document.getElementById('ContractName').value)  
+      formData.append("date", document.getElementById('ContractDate').value)
+      formData.append("rates",this.excelRates)
       formData.append("csrfmiddlewaretoken", '{{csrf_token}}') // 3
 
-
-      getAPI.post('http://127.0.0.1:8000/contracts/rates/contrato-1', formData)
+      getAPI.post('/contracts/create_contract/', formData)
         .then(response=> {
-          console.log("Form subido")
+          if (response.data.status == "Success") {
+            console.log("EEEEEEEEEEEEAAA");
+          }
         })
         .catch(err => {
-          console.log(err)
+          console.log(err);
         })
     },
 
@@ -89,6 +88,7 @@ export default {
         });
         //console.log(excelJsonArray);
         this.excelRates = XLSX.utils.sheet_to_json(worksheet);
+        console.log("termino de convertir archivo");
       };
       reader.readAsArrayBuffer(f);
     }
