@@ -14,7 +14,7 @@ from .models import Rates
 from .serializers import RatesSerializer
 # Create your views here.
 
-
+#Obterner todos los contratos
 class ContractListView(APIView):
     def get(self,request, format=None):
         contract = Contract.objects.all()
@@ -22,12 +22,22 @@ class ContractListView(APIView):
 
         return Response(serializer.data)
 
+#Obtener contrato especifico
+class ContractView(APIView):
+    def get(self,request, contract_slug):
+        contract = Contract.objects.get(slug = contract_slug)
+        serializer= ContractSerializer(contract)
+
+        return Response(serializer.data)
+
+#Obtener todos los rates de un contrato
 class RatesView(APIView):    
     def get(self,request, contract_slug):
         contract = get_list_or_404(Rates, contract = contract_slug)
         serializer = RatesSerializer(contract, many=True)
         return Response(serializer.data)
 
+#Crear contrato y sus rates respectivos
 class CreateContract(APIView):
     def post(self, request):
         if request.method == 'POST': 

@@ -4,17 +4,19 @@
             <thead>
                 <tr>
                     <th>Contrato</th>
+                    <th>Fecha</th>
                     <th>Origen</th>
                     <th>Destino</th>
                     <th>Moneda</th>
-                    <th>tw</th>
-                    <th>ft</th>
-                    <th>ftw</th>
+                    <th>Tarifa 20 GP</th>
+                    <th>Tarifa 40 GP</th>
+                    <th>Tarifa 40 HC</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="rate in ratesList" :key="rate.id">
-                    <td>{{rate.contract }}</td>
+                    <td>{{contractInfo['name']}}</td>
+                    <td>{{contractInfo['date']}}</td>
                     <td>{{rate.origin }}</td>
                     <td>{{rate.destination }}</td>
                     <td>{{rate.currency }}</td>
@@ -37,17 +39,27 @@ export default {
   props: ['contractSlug'],
   data(){
       return{
-          ratesList: []
+          ratesList: [],
+          contractInfo:[]
       }
   },
     //En caso de que el valor del slug pasado como prop cambie la funcion se ejecuta y obtiene los datos de ese mismo slug
     watch:{
         contractSlug: function(val){
             if (this.contractSlug){
+                //Obtengo contratos
                 getAPI.get('http://127.0.0.1:8000/contracts/rates/' + this.contractSlug )
                     .then(response=> {
                         //console.log(response.data)
                         this.ratesList = response.data
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                //Obtengo información del contrato
+                getAPI.get('http://127.0.0.1:8000/contracts/' + this.contractSlug )
+                    .then(response=> {
+                        this.contractInfo = response.data
                     })
                     .catch(err => {
                         console.log(err)
