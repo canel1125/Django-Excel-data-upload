@@ -50,7 +50,6 @@ export default {
                 //Obtengo contratos
                 getAPI.get('http://127.0.0.1:8000/contracts/rates/' + this.contractSlug )
                     .then(response=> {
-                        //console.log(response.data)
                         this.ratesList = response.data
                     })
                     .catch(err => {

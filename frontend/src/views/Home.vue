@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <div class="alert alert-success alert-dismissible" v-if="uploadedSlug">
+      <strong>Información guardada! </strong> La información se almacenó correctamente.
+    </div>
     <UploadForm v-on:emitedSlug=" getSlug($event)"/>
     <ContractsTable :contractSlug=uploadedSlug />
   </div>

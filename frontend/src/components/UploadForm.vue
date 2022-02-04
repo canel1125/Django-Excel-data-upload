@@ -4,7 +4,7 @@
       <div class="row justify-content-center align-items-center">
         <div class="col-lg-5 mx-auto">
           <div class="card">
-            <h3 class="mb-3">Ingresar ruta</h3>
+            <h3 class="mb-3">Ingrese contrato</h3>
             <div class="form-floating mb-3">
               <input type="name" class="form-control" id="ContractName" placeholder="Nombre" v-model="contract.name" required :max="date">
               <label for="floatingInput">Nombre</label>
@@ -17,7 +17,7 @@
               <input type="file" class="form-control" placeholder="Nombre" id="inputFile" accept=".xls,.xlsx" required @change="excelToJson">
             </div>
             <div class="d-grid gap-2">
-              <button class="btn btn-primary" type="submit">Continuar</button> 
+              <button class="btn btn-primary" type="submit">Guardar</button> 
             </div>
           </div>
         </div>
@@ -32,7 +32,7 @@ import {getAPI } from '../axios-api'
 import XLSX from 'xlsx';
 
 
-//Variable date donde voy a guardar la fecha actual para validar que no se ingrese una fecha futura por front
+//Fecha actual para validar que no se ingrese una fecha futura por front
 let date = new Date().toISOString().slice(0,-14)
 
 var excelRates =[];
@@ -55,7 +55,7 @@ export default {
       formData.name = document.getElementById('ContractName').value
       formData.date = document.getElementById('ContractDate').value
       formData.rates = excelRates
-      formData.csrfmiddlewaretoken ='{{csrf_token}}' // 3
+      formData.csrfmiddlewaretoken ='{{csrf_token}}'
 
       getAPI.post('/contracts/create_contract/', formData)
         .then(response=> {
@@ -89,7 +89,6 @@ export default {
           }
         });
         excelRates = excelJsonArray;
-        //console.log(excelRates);
       };
       reader.readAsArrayBuffer(f);
     },
