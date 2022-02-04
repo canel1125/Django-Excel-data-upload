@@ -1,8 +1,7 @@
 <template>
   <div>
     <div id="nav">
-      <router-link to="/">Cargar contratos</router-link> |
-      <router-link to="/search">Buscar contratos</router-link>
+      <router-link to="/">Cargar contratos</router-link>
     </div>
     <router-view/>
   </div>
