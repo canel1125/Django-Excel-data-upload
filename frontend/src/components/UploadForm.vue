@@ -50,9 +50,7 @@ export default {
   },
   methods:{
     createContract(){      
-      let formData = {
-
-      }
+      let formData = {}
     
       formData.name = document.getElementById('ContractName').value
       formData.date = document.getElementById('ContractDate').value
@@ -63,6 +61,7 @@ export default {
         .then(response=> {
           if (response.data.status == "Success") {
             console.log("El formulario se subió exitosamente");
+            this.sendSlug(response.data.createdContractSlug);
           }
         })
         .catch(err => {
@@ -70,6 +69,7 @@ export default {
         })
     },
 
+    //Convertir archivo excel seleccionado en datos utilizables
     excelToJson(e) {
       var files = e.target.files, f = files[0];
       var reader = new FileReader();
@@ -83,6 +83,7 @@ export default {
         //Lista de columnas innecesarias del excel
         let unwantedColumns=["ETT","20'FR","20'OT","20'TK","40'FH","40'FR","40'OH","40'OT","40'RH","40'RH_1","Routing"];
         excelJsonArray.forEach(rate => {
+          //Elimino columnas no utilizadas
           for (let i = 0; i < unwantedColumns.length; i++) {
             delete rate[unwantedColumns[i]];
           }
@@ -91,6 +92,10 @@ export default {
         //console.log(excelRates);
       };
       reader.readAsArrayBuffer(f);
+    },
+
+    sendSlug: function(slug){
+      this.$emit('emitedSlug',slug);
     }
   }
 }

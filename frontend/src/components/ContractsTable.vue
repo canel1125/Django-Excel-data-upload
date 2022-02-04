@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="contractSlug">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -34,20 +34,26 @@ import {getAPI } from '../axios-api'
 
 export default {
   name: 'ContractsTable',
+  props: ['contractSlug'],
   data(){
       return{
           ratesList: []
       }
   },
-    created(){
-        getAPI.get('http://127.0.0.1:8000/contracts/rates/contrato-1')
-            .then(response=> {
-                console.log(response.data)
-                this.ratesList = response.data
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    //En caso de que el valor del slug pasado como prop cambie la funcion se ejecuta y obtiene los datos de ese mismo slug
+    watch:{
+        contractSlug: function(val){
+            if (this.contractSlug){
+                getAPI.get('http://127.0.0.1:8000/contracts/rates/' + this.contractSlug )
+                    .then(response=> {
+                        //console.log(response.data)
+                        this.ratesList = response.data
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            }
+        }
     }
 }
 </script>

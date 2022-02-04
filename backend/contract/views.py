@@ -36,6 +36,7 @@ class CreateContract(APIView):
             obtained_name = obtained_data['name']
             obtained_date = obtained_data['date']
             obtained_rates = obtained_data['rates']
+            
 
             #Consulto si el contrato ya fue creado, en caso de serlo solo agrego rates
             obj, created = Contract.objects.get_or_create(
@@ -45,7 +46,9 @@ class CreateContract(APIView):
 
             rates_to_create = []
             for rate in obtained_rates:
-                rateObject = Rates(
+                #Compruebo no ingresar valores vacios
+                if "n.a." not in rate.values():
+                    rateObject = Rates(
                     contract = obj,
                     origin = rate["POL"],
                     destination = rate["POD"],
@@ -55,8 +58,8 @@ class CreateContract(APIView):
                     fortyhc = rate["40'HC"]
                 )
                 rates_to_create.append(rateObject)
-            #Almaceno los rates todos juntos
-            Rates.objects.bulk_create(rates_to_create)
+        #Almaceno los rates todos juntos
+        Rates.objects.bulk_create(rates_to_create)
             
         return Response({
             "status": 'Success',

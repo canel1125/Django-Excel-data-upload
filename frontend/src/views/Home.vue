@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <UploadForm />
-    <ContractsTable/>
+    <UploadForm v-on:emitedSlug=" getSlug($event)"/>
+    <ContractsTable :contractSlug=uploadedSlug />
   </div>
 </template>
 
@@ -16,6 +16,16 @@ export default {
   components: {
     UploadForm,
     ContractsTable
+  },
+  data(){
+    return{
+      uploadedSlug: false
+    }
+  },
+  methods:{
+    getSlug: function(value){
+      this.uploadedSlug = value;
+    }
   }
 }
 </script>
